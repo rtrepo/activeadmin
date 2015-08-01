@@ -1,8 +1,8 @@
+require "active_admin/error"
+require "active_admin/dependency"
+
 module ActiveAdmin
   module Generators
-    class Error < Rails::Generators::Error
-    end
-
     class DeviseGenerator < Rails::Generators::NamedBase
       desc "Creates an admin user and uses Devise for authentication"
       argument :name, type: :string, default: "AdminUser"
@@ -17,9 +17,9 @@ module ActiveAdmin
 
       def install_devise
         begin
-          Dependency.devise! Dependency::DEVISE
+          Dependency.devise! Dependency::Requirements::DEVISE
         rescue DependencyError => e
-          raise Error, "#{e.message} If you don't want to use devise, run the generator with --skip-users."
+          raise ActiveAdmin::GeneratorError, "#{e.message} If you don't want to use devise, run the generator with --skip-users."
         end
 
         require 'devise'
@@ -34,7 +34,7 @@ module ActiveAdmin
 
       def create_admin_user
         if RESERVED_NAMES.include?(name.underscore)
-          raise Error, "The name #{name} is reserved by Active Admin"
+          raise ActiveAdmin::GeneratorError, "The name #{name} is reserved by Active Admin"
         end
         invoke "devise", [name]
       end

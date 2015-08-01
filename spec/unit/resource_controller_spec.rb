@@ -157,7 +157,7 @@ end
 
 describe Admin::PostsController, type: "controller" do
 
-  describe 'retreiving the resource' do
+  describe 'retrieving the resource' do
     let(:controller){ Admin::PostsController.new }
     let(:post) { Post.new title: "An incledibly unique Post Title" }
 
@@ -186,7 +186,7 @@ describe Admin::PostsController, type: "controller" do
     end
   end
 
-  describe 'retreiving the resource collection' do
+  describe 'retrieving the resource collection' do
     let(:controller){ Admin::PostsController.new }
     let(:config) { controller.class.active_admin_config }
     before do
@@ -231,9 +231,17 @@ describe Admin::PostsController, type: "controller" do
     end
 
     describe "when params batch_action matches existing BatchAction" do
-      it "should call the block with args" do
+      before do
         allow(controller).to receive(:params) { { batch_action: "flag", collection_selection: ["1"] } }
+      end
+
+      it "should call the block with args" do
         expect(controller).to receive(:instance_exec).with(["1"], {})
+        controller.batch_action
+      end
+
+      it "should call the block in controller scope" do
+        expect(controller).to receive(:render_in_context).with(controller, nil).and_return({})
         controller.batch_action
       end
     end

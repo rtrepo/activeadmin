@@ -12,7 +12,7 @@ module ActiveAdmin
     # To display columns, use the #columns method. Within the block, call the
     # #column method to create a new column.
     #
-    # To createa a two column layout:
+    # To create a two column layout:
     #
     #     colums do
     #       column do
@@ -63,7 +63,6 @@ module ActiveAdmin
     class Columns < ActiveAdmin::Component
       builder_method :columns
 
-
       # For documentation, please take a look at Column#build
       def column(*args, &block)
         insert_tag Column, *args, &block
@@ -94,19 +93,24 @@ module ActiveAdmin
         all_margins_width = margin_size * (span_count - 1)
         column_width = (100.00 - all_margins_width) / span_count
 
-        children.each_with_index do |col, i|
+        columns.each_with_index do |column, i|
           is_last_column = i == (columns_count - 1)
-          col.set_column_styles(column_width, margin_size, is_last_column)
+          column.set_column_styles(column_width, margin_size, is_last_column)
         end
       end
 
       def columns_span_count
         count = 0
-        children.each {|column| count += column.span_size }
+        columns.each do |column|
+          count += column.span_size
+        end
 
         count
       end
 
+      def columns
+        children.select { |child| child.is_a?(Column) }
+      end
     end
 
     class Column < ActiveAdmin::Component

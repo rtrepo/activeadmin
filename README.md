@@ -2,12 +2,13 @@
 
 Active Admin is a Ruby on Rails framework for creating elegant backends for website administration.
 
-[![Version  ](http://img.shields.io/gem/v/activeadmin.svg)                         ](https://rubygems.org/gems/activeadmin)
-[![Travis CI](http://img.shields.io/travis/activeadmin/activeadmin/master.svg)     ](https://travis-ci.org/activeadmin/activeadmin)
-[![Quality  ](http://img.shields.io/codeclimate/github/activeadmin/activeadmin.svg)](https://codeclimate.com/github/activeadmin/activeadmin)
-[![Coverage ](http://img.shields.io/coveralls/activeadmin/activeadmin.svg)         ](https://coveralls.io/r/activeadmin/activeadmin)
-[![Gittip   ](http://img.shields.io/gittip/activeadmin.svg)                        ](https://gittip.com/activeadmin)
-[![Inch CI  ](http://inch-ci.org/github/activeadmin/activeadmin.svg?branch=master) ](http://inch-ci.org/github/activeadmin/activeadmin)
+[![Version         ](http://img.shields.io/gem/v/activeadmin.svg)                               ](https://rubygems.org/gems/activeadmin)
+[![Travis CI       ](http://img.shields.io/travis/activeadmin/activeadmin/master.svg)           ](https://travis-ci.org/activeadmin/activeadmin)
+[![Quality         ](http://img.shields.io/codeclimate/github/activeadmin/activeadmin.svg)      ](https://codeclimate.com/github/activeadmin/activeadmin)
+[![Coverage        ](http://img.shields.io/coveralls/activeadmin/activeadmin.svg)               ](https://coveralls.io/r/activeadmin/activeadmin)
+[![Gittip          ](http://img.shields.io/gittip/activeadmin.svg)                              ](https://gittip.com/activeadmin)
+[![Inch CI         ](http://inch-ci.org/github/activeadmin/activeadmin.svg?branch=master)       ](http://inch-ci.org/github/activeadmin/activeadmin)
+[![Stories in Ready](http://badge.waffle.io/activeadmin/activeadmin.png?label=ready&title=ready)](https://waffle.io/activeadmin/activeadmin)
 
 ## State of the project
 
@@ -15,11 +16,18 @@ Active Admin is a Ruby on Rails framework for creating elegant backends for webs
 
 We're [currently working on 1.0.0](https://github.com/activeadmin/activeadmin/issues?milestone=18),
 which as far as dependencies, moves us from meta_search to Ransack and adds Rails 4 support.
-You can get Rails 4 and 4.1 support by tracking master:
 
+You can get it by tracking master:
 ```ruby
 gem 'activeadmin', github: 'activeadmin'
 ```
+
+Or you can using rubygems:
+```ruby
+gem 'activeadmin', '~> 1.0.0.pre1'
+```
+
+*Keep in mind that during the time where we use `pre`-release label, things can break in each release!*
 
 ### 0.6.x
 
@@ -76,7 +84,6 @@ Tool                  | Description
 [Arbre]               | Ruby -> HTML, just like that.
 [Devise]              | Powerful, extensible user authentication
 [Formtastic]          | A Rails form builder plugin with semantically rich and accessible markup
-[Iconic Icons]        | An excellent SVG icon set designed by P.J. Onori
 [Inherited Resources] | Simplifies controllers with pre-built RESTful controller actions
 [Kaminari]            | Elegant pagination for any sort of collection
 [Ransack]             | Provides a simple search API to query your data
@@ -84,7 +91,6 @@ Tool                  | Description
 [Arbre]: https://github.com/activeadmin/arbre
 [Devise]: https://github.com/plataformatec/devise
 [Formtastic]: https://github.com/justinfrench/formtastic
-[Iconic Icons]: http://somerandomdude.com/projects/iconic
 [Inherited Resources]: https://github.com/josevalim/inherited_resources
 [Kaminari]: https://github.com/amatsuda/kaminari
 [Ransack]: https://github.com/activerecord-hackery/ransack

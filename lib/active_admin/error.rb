@@ -33,6 +33,7 @@ module ActiveAdmin
       super "Your file, #{file} (line #{line}), caused a database error while Active Admin was loading. This " +
             "is most common when your database is missing or doesn't have the latest migrations applied. To " +
             "prevent this error, move the code to a place where it will only be run when a page is rendered. " +
+            "One solution can be, to wrap the query in a Proc." +
             "Original error message: #{exception.message}"
     end
 
@@ -42,7 +43,7 @@ module ActiveAdmin
       raise new exception
     end
 
-  private
+    private
 
     def self.database_error_classes
       @classes ||= []
@@ -53,6 +54,9 @@ module ActiveAdmin
   end
 
   class NoMenuError < KeyError
+  end
+
+  class GeneratorError < Error
   end
 
 end

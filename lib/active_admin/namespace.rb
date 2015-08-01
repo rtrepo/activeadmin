@@ -110,13 +110,13 @@ module ActiveAdmin
     # Add a callback to be ran when we build the menu
     #
     # @param [Symbol] name The name of the menu. Default: :default
-    # @param [Proc] block The block to be ran when the menu is built
+    # @yield [ActiveAdmin::Menu] The block to be ran when the menu is built
     #
     # @return [void]
-    def build_menu(name = DEFAULT_MENU, &block)
+    def build_menu(name = DEFAULT_MENU)
       @menus.before_build do |menus|
         menus.menu name do |menu|
-          block.call(menu)
+          yield menu
         end
       end
     end
@@ -146,8 +146,8 @@ module ActiveAdmin
     def add_current_user_to_menu(menu, priority = 10, html_options = {})
       if current_user_method
         menu.add id: 'current_user', priority: priority, html_options: html_options,
-          label: ->{ display_name current_active_admin_user },
-          url:   ->{ auto_url_for(current_active_admin_user) || '#' },
+          label: -> { display_name current_active_admin_user },
+          url:   -> { auto_url_for(current_active_admin_user) },
           if:    :current_active_admin_user?
       end
     end
@@ -157,7 +157,7 @@ module ActiveAdmin
     def build_menu_collection
       @menus = MenuCollection.new
 
-      @menus.on_build do |menus|
+      @menus.on_build do
         build_default_utility_nav
 
         resources.each do |resource|
@@ -227,5 +227,21 @@ module ActiveAdmin
       PageDSL.new(config).run_registration_block(&block)
     end
 
+    class Store
+      include Enumerable
+      delegate :[], :[]=, :empty?, to: :@namespaces
+
+      def initialize
+        @namespaces = {}
+      end
+
+      def each(&block)
+        @namespaces.values.each(&block)
+      end
+
+      def names
+        @namespaces.keys
+      end
+    end
   end
 end

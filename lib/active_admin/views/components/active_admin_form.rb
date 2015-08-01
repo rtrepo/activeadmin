@@ -33,14 +33,22 @@ module ActiveAdmin
 
         @opening_tag, @closing_tag = split_string_on(form_string, "</form>")
         instance_eval(&block) if block_given?
+
+        # Rails 4 sets multipart automatically if a file field is present,
+        # but the form tag has already been rendered before the block eval.
+        if multipart? && @opening_tag !~ /multipart/
+          @opening_tag.sub!(/<form/, '<form enctype="multipart/form-data"')
+        end
       end
 
       def inputs(*args, &block)
+        if block_given?
+          form_builder.template.assign(has_many_block: true)
+        end
         if block_given? && block.arity == 0
           wrapped_block = proc do
             wrap_it = form_builder.already_in_an_inputs_block ? true : false
             form_builder.already_in_an_inputs_block = true
-            form_builder.template.assign('has_many_block'=> true)
             content = form_builder.template.capture do
               block.call
             end
@@ -70,6 +78,10 @@ module ActiveAdmin
 
       def has_many(*args, &block)
         insert_tag(HasManyProxy, form_builder, *args, &block)
+      end
+
+      def multipart?
+        form_builder && form_builder.multipart?
       end
 
       def object
@@ -104,8 +116,6 @@ module ActiveAdmin
 
     class HasManyProxy < FormtasticProxy
       def build(form_builder, *args, &block)
-        assoc = args[0]
-        builder_options = args[1] || {}
         text_node form_builder.has_many(*args, &block)
       end
     end

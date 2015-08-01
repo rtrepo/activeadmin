@@ -52,7 +52,7 @@ Which looks for something like this:
 
 ```ruby
 # app/views/admin/posts/_form.html.arb
-active_admin_form_for resource do |f|
+insert_tag active_admin_form_for resource do |f|
   inputs :title, :body
   actions
 end
@@ -79,7 +79,7 @@ ActiveAdmin.register Post do
       end
     end
     f.inputs do
-      f.has_many :taggings, sortable: :position do |t|
+      f.has_many :taggings, sortable: :position, sortable_start: 1 do |t|
         t.input :tag
       end
     end
@@ -105,6 +105,8 @@ If you pass a string, it will be used as the text for the new record button.
 
 The `:sortable` option adds a hidden field and will enable drag & drop sorting of the children. It 
 expects the name of the column that will store the index of each child.
+
+The `:sortable_start` option sets the value (0 by default) of the first position in the list.
 
 ## Datepicker
 

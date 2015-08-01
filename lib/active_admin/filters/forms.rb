@@ -1,24 +1,19 @@
 module ActiveAdmin
   module Filters
-
-    class InputClassFinder < Formtastic::InputClassFinder
-      def class_name(as)
-        "Filter#{super}"
-      end
-    end
-
     # This form builder defines methods to build filter forms such
     # as the one found in the sidebar of the index page of a standard resource.
     class FormBuilder < ::ActiveAdmin::FormBuilder
       include ::ActiveAdmin::Filters::FormtasticAddons
+      self.input_namespaces = [::Object, ::ActiveAdmin::Inputs::Filters, ::ActiveAdmin::Inputs, ::Formtastic::Inputs]
+
+      # TODO: remove input class finders after formtastic 4 (where it will be default)
+      self.input_class_finder = ::Formtastic::InputClassFinder
 
       def filter(method, options = {})
         if method.present? && options[:as] ||= default_input_type(method)
           template.concat input(method, options)
         end
       end
-
-      self.input_class_finder = InputClassFinder
 
       protected
 
@@ -70,13 +65,18 @@ module ActiveAdmin
           buttons = content_tag :div, class: "buttons" do
             f.submit(I18n.t('active_admin.filters.buttons.filter')) +
               link_to(I18n.t('active_admin.filters.buttons.clear'), '#', class: 'clear_filters_btn') +
-              hidden_field_tags_for(params, except: [:q, :page])
+              hidden_field_tags_for(params, except: except_hidden_fields)
           end
 
           f.template.concat buttons
         end
       end
 
+      private
+
+      def except_hidden_fields
+        [:q, :page]
+      end
     end
 
   end

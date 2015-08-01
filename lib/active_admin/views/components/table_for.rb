@@ -10,8 +10,9 @@ module ActiveAdmin
       def build(obj, *attrs)
         options         = attrs.extract_options!
         @sortable       = options.delete(:sortable)
-        @resource_class = options.delete(:i18n)
         @collection     = obj.respond_to?(:each) && !obj.is_a?(Hash) ? obj : [obj]
+        @resource_class = options.delete(:i18n)
+        @resource_class ||= @collection.klass if @collection.respond_to? :klass
         @columns        = []
         @row_class      = options.delete(:row_class)
 
@@ -115,10 +116,10 @@ module ActiveAdmin
       end
 
       def is_boolean?(data, item)
-        if item.respond_to? :type_for_attribute # Rails >= 4.2
-          item.type_for_attribute(data) == :boolean
-        elsif item.respond_to? :column_for_attribute
-          attr = item.column_for_attribute(data) and attr.type == :boolean
+        if item.respond_to? :has_attribute?
+          item.has_attribute?(data) &&
+            item.column_for_attribute(data) &&
+            item.column_for_attribute(data).type == :boolean
         end
       end
 

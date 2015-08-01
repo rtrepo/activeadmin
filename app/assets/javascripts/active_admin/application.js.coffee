@@ -1,19 +1,21 @@
 # Initializers
-$ ->
+$(document).on 'ready page:load', ->
   # jQuery datepickers (also evaluates dynamically added HTML)
-  $(document).on 'focus', '.datepicker:not(.hasDatepicker)', ->
+  $(document).on 'focus', 'input.datepicker:not(.hasDatepicker)', ->
+    $input = $(@)
+
+    # Only applying datepicker to compatible browsers
+    return if $input[0].type is 'date'
+
     defaults = dateFormat: 'yy-mm-dd'
-    options = $(@).data 'datepicker-options'
-    $(@).datepicker $.extend(defaults, options)
+    options = $input.data 'datepicker-options'
+    $input.datepicker $.extend(defaults, options)
 
   # Clear Filters button
   $('.clear_filters_btn').click ->
     params = window.location.search.split('&')
     regex = /^(q\[|q%5B|q%5b|page|commit)/
     window.location.search = (param for param in params when not param.match(regex)).join('&')
-
-  # Batch Actions dropdown
-  $('.dropdown_button').popover()
 
   # Filter form: don't send any inputs that are empty
   $('.filter_form').submit ->
@@ -24,8 +26,8 @@ $ ->
   $('.filter_form_field.select_and_search select').change ->
     $(@).siblings('input').prop name: "q[#{@value}]"
 
-  # Tab navigation in the show page
-  $('#main_content .tabs').tabs()
+  # Tab navigation
+  $('#active_admin_content .tabs').tabs()
 
   # In order for index scopes to overflow properly onto the next line, we have
   # to manually set its width based on the width of the batch action button.
